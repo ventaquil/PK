@@ -1,0 +1,32 @@
+{
+  "name": "PK",
+  "version": "0.1.0",
+  "description": "",
+  "main": "application.js",
+  "dependencies": {
+    "dateformat": "^2.0.0",
+    "express": "^4.15.2",
+    "express-session": "^1.15.2",
+    "fs": "0.0.1-security",
+    "gulp-clean-css": "^3.2.0",
+    "gulp-concat": "^2.6.1",
+    "gulp-rename": "^1.2.2",
+    "gulp-sass": "^3.1.0",
+    "gulp-sourcemaps": "^2.6.0",
+    "gulp-uglify": "^2.1.2",
+    "path": "^0.12.7",
+    "pug": "^2.0.0-rc.1"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ventaquil/PK.git"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ventaquil/PK/issues"
+  },
+  "homepage": "https://github.com/ventaquil/PK#readme"
+}

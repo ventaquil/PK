@@ -1,0 +1,12 @@
+extends ../layout
+
+block content
+    div#homepage-index-container.container.text-center
+        div.row
+            div.col-xs-12
+                h1
+                    span
+                        | Create new room
+
+                form#homepage-index-form(method="post")
+                    input#homepage-index-submit.btn.btn-success(type="submit" value="Create")

@@ -1,0 +1,22 @@
+body {
+    background-color: #f4fbfd;
+    color: #0e1518;
+
+    .js-only {
+        @extend .hidden;
+    }
+
+    a {
+        color: #e9f7fc;
+        transition: color 0.3s;
+
+        &:hover, &:focus {
+            color: #ffffff;
+            outline: 0;
+            text-decoration: none;
+        }
+    }
+
+    // Layout files
+    @import "layout/navbar";
+}
