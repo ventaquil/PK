@@ -54,7 +54,7 @@ module.exports = {
         }
     },
     'show_action': function (req, res) {
-        if (req.params.uuid && (req.session.rooms.indexOf(req.params.uuid) !== false)) {
+        if (req.params.uuid && (req.session.rooms.indexOf(req.params.uuid) >= 0)) {
             database.connect(function (err, db) {
                 if (err) {
                     throw err;
