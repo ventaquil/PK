@@ -1,0 +1,13 @@
+div#room-show-container.container {
+    background-color: #181818;
+    border: 0.1rem solid #ccff00;
+    border-radius: 0.3rem;
+    margin-top: 7rem;
+    padding-bottom: 3.6rem;
+    padding-top: 3.6rem;
+
+    @media (min-width: $screen-md-min) {
+        max-width: 800px;
+        width: 60%;
+    }
+}
