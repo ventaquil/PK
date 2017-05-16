@@ -4,6 +4,7 @@ const directory = require('./helpers/directory');
 const error = require('./controllers/error');
 const express = require('express');
 const homepage = require('./controllers/homepage');
+const room = require('./controllers/room');
 const session = require('express-session');
 
 const routes = function (app) {
@@ -25,7 +26,14 @@ routes.prototype._middlewares = function () {
             'resave': false,
             'saveUninitialized': true,
             'secret': process.env.SECURE || 'secure'
-        })
+        }),
+        function (req, res, next) {
+            if (!req.session.rooms) {
+                req.session.rooms = [];
+            }
+
+            next();
+        }
     ];
 
     const app = this._app;
@@ -40,6 +48,12 @@ routes.prototype._routes = function () {
 
     { // Homepage
         app.get('/', homepage.index_action);
+    }
+
+    { // Rooms
+        app.post('/create', room.create_action);
+
+        app.get('/room/:uuid', room.show_action);
     }
 
     app.all('*', error.code_404);

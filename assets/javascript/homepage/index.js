@@ -4,7 +4,18 @@ document.addEventListener('DOMContentLoaded', function () {
     function createRoom(event) {
         event.preventDefault();
 
-        // @TODO AJAX call here
+        const xhttp = new XMLHttpRequest();
+        xhttp.addEventListener('readystatechange', function () {
+            if ((this.readyState === 4) && (this.status === 200)) {
+                const data = JSON.parse(this.responseText);
+
+                if (data.success) {
+                    window.location.href = ['', 'room', data.href].join('/');
+                }
+            }
+        });
+        xhttp.open('post', '/create', true);
+        xhttp.send();
     }
 
     Array.from(document.getElementsByClassName('container')).forEach(function (element) {
