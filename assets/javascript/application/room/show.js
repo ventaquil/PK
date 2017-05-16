@@ -22,9 +22,15 @@ document.addEventListener('DOMContentLoaded', function () {
 
     Array.from(document.getElementsByClassName('container')).forEach(function (element) {
         if (element.id === 'room-show-container') {
-            document.getElementById('room-show-invite-form').addEventListener('submit', show_hidden);
+            const invite_form = document.getElementById('room-show-invite-form');
 
-            document.getElementById('room-show-invite-button').addEventListener('click', show_hidden);
+            const invite_button = document.getElementById('room-show-invite-button');
+
+            if (invite_form && invite_button) {
+                invite_form.addEventListener('submit', show_hidden);
+
+                invite_button.addEventListener('click', show_hidden);
+            }
         }
     });
 });

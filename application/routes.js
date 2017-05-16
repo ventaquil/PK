@@ -54,6 +54,8 @@ routes.prototype._routes = function () {
         app.post('/create', room.create_action);
 
         app.get('/room/:uuid', room.show_action);
+
+        app.get('/room/:uuid/:join', room.join_action);
     }
 
     app.all('*', error.code_404);
