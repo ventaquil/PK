@@ -1,7 +1,7 @@
 'use strict';
 
 document.addEventListener('DOMContentLoaded', function () {
-    function createRoom(event) {
+    function create_room(event) {
         event.preventDefault();
 
         const xhttp = new XMLHttpRequest();
@@ -20,9 +20,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
     Array.from(document.getElementsByClassName('container')).forEach(function (element) {
         if (element.id === 'homepage-index-container') {
-            document.getElementById('homepage-index-form').addEventListener('submit', createRoom);
+            document.getElementById('homepage-index-form').addEventListener('submit', create_room);
 
-            document.getElementById('homepage-index-submit').addEventListener('submit, click', createRoom);
+            document.getElementById('homepage-index-submit').addEventListener('click', create_room);
         }
     });
 });

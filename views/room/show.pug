@@ -2,6 +2,18 @@ extends ../layout
 
 block content
     div#room-show-container.container.text-center
-        div.row
-            div.col-xs-12
-                | Room
+        if room.users.length < 2
+            div.row
+                div.col-xs-12
+                    | You need at least one more person
+
+            div.row
+                div.col-xs-12
+                    form#room-show-invite-form
+                        input#room-show-invite-button.btn.btn-default(type="submit" value="Show invite link")
+
+                        a.hidden #{join_url}
+        else
+            div.row
+                div.col-xs-12
+                    | TODO

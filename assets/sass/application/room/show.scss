@@ -10,4 +10,39 @@ div#room-show-container.container {
         max-width: 800px;
         width: 60%;
     }
+
+    div.row {
+        > div {
+            form {
+                &#room-show-invite-form {
+                    margin: 2rem 0;
+
+                    a, input#room-show-invite-button {
+                        font-size: 1.2rem;
+                        font-weight: bold;
+                        margin: 0;
+                        padding: 0.6rem 1.2rem;
+                    }
+
+                    a {
+                        cursor: pointer;
+                        display: inline-block;
+                        margin: 0.1rem;
+                    }
+
+                    input#room-show-invite-button {
+                        background-color: transparent;
+                        border-color: #ccff00;
+                        color: #ccff00;
+                        transition: background-color 0.3s, border-color 0.3s, color 0.3s, margin 0.3s, padding 0.3s;
+
+                        &:hover, &:focus {
+                            margin: -0.6rem;
+                            padding: 1.2rem 1.8rem;
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
