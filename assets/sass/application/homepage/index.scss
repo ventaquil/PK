@@ -1,6 +1,6 @@
 div#homepage-index-container.container {
-    background-color: #f9fdfe;
-    border: 0.1rem solid #93d9f4;
+    background-color: #181818;
+    border: 0.1rem solid #ccff00;
     border-radius: 0.3rem;
     margin-top: 7rem;
     padding-bottom: 3.6rem;
@@ -14,25 +14,22 @@ div#homepage-index-container.container {
     div.row {
         > div {
             h1 {
-                color: #6697aa;
                 cursor: default;
                 margin: 0 0 7rem;
             }
 
             form#homepage-index-form {
                 input#homepage-index-submit {
-                    background-color: #b3e4f7;
-                    border-color: #b3e4f7;
-                    color: #f4fbfd;
+                    background-color: transparent;
+                    border-color: #ccff00;
+                    color: #ccff00;
                     font-size: 2.4rem;
+                    font-weight: bold;
                     margin: 0;
                     padding: 0.6rem 1.8rem;
                     transition: background-color 0.3s, border-color 0.3s, color 0.3s, margin 0.3s, padding 0.3s;
 
                     &:hover, &:focus {
-                        background-color: #93d9f4;
-                        border-color: #93d9f4;
-                        color: #ffffff;
                         margin: -1.2rem;
                         padding: 1.8rem 3.2rem;
                     }

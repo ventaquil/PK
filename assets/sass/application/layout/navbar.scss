@@ -1,5 +1,5 @@
 nav {
-    background-color: #93d9f4;
+    background-color: #181818;
     cursor: default;
     height: 4rem;
 
@@ -7,11 +7,13 @@ nav {
         display: inline-block;
         height: 100%;
         outline: 0;
-        text-shadow: 0 0 0.3rem #75adc3;
-        transition: color 0.3s, text-shadow 0.3s;
 
         &:hover {
-            text-shadow: 0 0 0.6rem #6697aa;
+            strong {
+                span {
+                    color: #ccff00;
+                }
+            }
         }
 
         strong {

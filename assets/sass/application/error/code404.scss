@@ -1,29 +1,27 @@
 div#error-code404-container.container {
-    background-color: #93d9f4;
+    background-color: #181818;
     border-radius: 3.6rem 0;
-    color: #ffffff;
     margin-top: 7rem;
     padding-bottom: 3.6rem;
     padding-top: 3.6rem;
-    text-shadow: 0 0 0.3rem #75adc3;
 
     div.row {
         > div {
             cursor: default;
 
             h1 {
+                color: #ccff00;
                 font-size: 6.4rem;
             }
 
             a {
                 border-bottom: 0.1rem solid #ffffff;
-                color: #e9f7fc;
-                transition: color 0.3s, border-bottom-color 0.3s, text-shadow 0.3s;
+                color: #ccff00;
+                transition: color 0.3s, border-bottom-color 0.3s;
 
                 &:hover {
-                    border-bottom-color: #e9f7fc;
+                    border-bottom-color: #ccff00;
                     color: #ffffff;
-                    text-shadow: 0 0 0.6rem #6697aa;
                 }
             }
         }
