@@ -12,14 +12,18 @@ const port = process.env.PORT || 8000; // Choose application port
 
 app.set('view engine', 'pug'); // Set render engine
 
-const routes = require('./application/routes')(app);
+try {
+    const routes = require('./application/routes')(app);
 
-database.connect(function (err, db) {
-    logger.log('MongoDB is running (port ' + database.port + ', database ' + database.database + ')', true);
+    database.connect(function (err, db) {
+        logger.log('MongoDB is running (port ' + database.port + ', database ' + database.database + ')', true);
 
-    db.close();
-});
+        db.close();
+    });
 
-http.listen(port, function () { // Listen on specified port
-    logger.log('Listening on port ' + port, true);
-});
+    http.listen(port, function () { // Listen on specified port
+        logger.log('Listening on port ' + port, true);
+    });
+} catch (exception) {
+    logger.log('Exception occurred - ' + exception, true);
+}

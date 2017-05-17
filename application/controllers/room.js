@@ -69,6 +69,10 @@ module.exports = {
                         }
 
                         collection.findOne({'id': req.params.uuid, 'join': req.params.join}, function (err, room) {
+                            if (err) {
+                                throw err;
+                            }
+
                             if (room === null) {
                                 return req.next();
                             }
@@ -76,8 +80,6 @@ module.exports = {
                             req.session.rooms.push(room.id);
 
                             room.users.push(req.session.id);
-
-                            console.log(room, req.session.id);
 
                             collection.update({'id' : room.id}, room, null, function (err) {
                                 if (err) {
@@ -111,6 +113,10 @@ module.exports = {
                     }
 
                     collection.findOne({'id': req.params.uuid}, function (err, room) {
+                        if (err) {
+                            throw err;
+                        }
+
                         db.close();
 
                         if (room === null) {
