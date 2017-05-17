@@ -24,27 +24,39 @@ module.exports = {
 
                     var roomId;
 
-                    do {
+                    const makeAction = function () { // Make evil function to hack do..while
                         roomId = uuid.v1();
-                    } while (false); // @TODO
 
-                    collection.insertOne({
-                        'id': roomId,
-                        'timestamp': new Date().getTime(),
-                        'users': [
-                            req.session.id
-                        ],
-                        'join': crypto.createHmac('sha256', roomId).digest('hex').substr(5, random(4, 16))
-                    });
+                        collection.count({'id': roomId}, null, function (err, count) {
+                            if (err) {
+                                throw err;
+                            }
 
-                    req.session.rooms.push(roomId);
+                            if (count > 0) { // Oh, generate another identifier
+                                makeAction(); // Evil recursive call - because of async
+                            } else {
+                                collection.insertOne({
+                                    'id': roomId,
+                                    'timestamp': new Date().getTime(),
+                                    'users': [
+                                        req.session.id
+                                    ],
+                                    'join': crypto.createHmac('sha256', roomId).digest('hex').substr(5, random(4, 16))
+                                });
 
-                    db.close();
+                                req.session.rooms.push(roomId);
 
-                    return res.json({
-                        'href': roomId,
-                        'success': true
-                    });
+                                db.close();
+
+                                return res.json({
+                                    'href': roomId,
+                                    'success': true
+                                });
+                            }
+                        });
+                    };
+
+                    makeAction();
                 });
             });
         } else {
