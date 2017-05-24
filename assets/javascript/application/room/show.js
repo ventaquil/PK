@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', function () {
     Array.from(document.getElementsByClassName('container')).forEach(function (element) {
         if (element.id === 'room-show-container') {
             window.addEventListener('load', function() {
-                socket.emit('connection', 'qwerty');
+                socket.emit('connection', 'connection');
             });
 
             const invite_form = document.getElementById('room-show-invite-form');
@@ -36,8 +36,16 @@ document.addEventListener('DOMContentLoaded', function () {
                 invite_button.addEventListener('click', show_hidden);
             }
 
+            socket.on('isanybodyhere', function(msg){
+                socket.emit('iamhere', 'id');
+            });
+
+            socket.on('somebodyishere', function(msg){
+                alert(msg);
+            });
+
             window.addEventListener('unload', function() {
-                socket.emit('disconnection', 'qwertyyy');
+                socket.emit('disconnection', 'disconnection');
             });
         }
     });

@@ -36,7 +36,11 @@ try {
 io.on('connection', function(socket){
     socket.on('connection', function(msg) {
         console.log(msg);
+        io.emit('isanybodyhere', 'is anybody here');
     }).on('disconnection', function(msg) {
         console.log(msg);
+    }).on('iamhere', function(msg) {
+        console.log(msg);
+        io.emit('somebodyishere', msg);
     });
 });
