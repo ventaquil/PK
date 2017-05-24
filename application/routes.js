@@ -1,5 +1,6 @@
 'use strict';
 
+const crypto = require('crypto');
 const directory = require('./helpers/directory');
 const error = require('./controllers/error');
 const express = require('express');
@@ -27,9 +28,18 @@ routes.prototype._middlewares = function () {
             'saveUninitialized': true,
             'secret': process.env.SECURE || 'secure'
         }),
-        function (req, res, next) {
+        function (req, res, next) { // Create rooms array in session
             if (!req.session.rooms) {
                 req.session.rooms = [];
+            }
+
+            next();
+        },
+        function (req, res, next) { // Set session hash identifier
+            if (!req.session.identifier) {
+                req.session.identifier = crypto.createHmac('sha256', req.session.id).digest('hex');
+
+                res.cookie('identifier', req.session.identifier, {});
             }
 
             next();
