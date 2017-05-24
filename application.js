@@ -36,5 +36,7 @@ try {
 io.on('connection', function(socket){
     socket.on('connection', function(msg) {
         console.log(msg);
+    }).on('disconnection', function(msg) {
+        console.log(msg);
     });
 });
