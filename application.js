@@ -34,5 +34,7 @@ try {
 }
 
 io.on('connection', function(socket){
-    console.log('Connection'); // debug
+    socket.on('connection', function(msg) {
+        console.log(msg);
+    });
 });

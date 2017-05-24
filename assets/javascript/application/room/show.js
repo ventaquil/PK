@@ -22,6 +22,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
     Array.from(document.getElementsByClassName('container')).forEach(function (element) {
         if (element.id === 'room-show-container') {
+            socket.emit('connection', 'qwerty');
+
             const invite_form = document.getElementById('room-show-invite-form');
 
             const invite_button = document.getElementById('room-show-invite-button');
