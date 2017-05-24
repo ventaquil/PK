@@ -16,6 +16,10 @@ try {
     const routes = require('./application/routes')(app);
 
     database.connect(function (err, db) {
+        if (err) {
+            throw err;
+        }
+
         logger.log('MongoDB is running (port ' + database.port + ', database ' + database.database + ')', true);
 
         db.close();
