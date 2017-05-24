@@ -1,8 +1,6 @@
 'use strict';
 
 document.addEventListener('DOMContentLoaded', function () {
-    const socket = io();
-
     function create_room(event) {
         event.preventDefault();
 
