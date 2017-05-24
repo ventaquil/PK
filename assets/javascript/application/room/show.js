@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     Array.from(document.getElementsByClassName('container')).forEach(function (element) {
         if (element.id === 'room-show-container') {
-            window.addEventListener('load', function() {
+            window.addEventListener('load', function () {
                 socket.emit('connection', 'connection');
             });
 
@@ -36,15 +36,15 @@ document.addEventListener('DOMContentLoaded', function () {
                 invite_button.addEventListener('click', show_hidden);
             }
 
-            socket.on('isanybodyhere', function(msg){
+            socket.on('isanybodyhere', function (msg) {
                 socket.emit('iamhere', 'id');
             });
 
-            socket.on('somebodyishere', function(msg){
+            socket.on('somebodyishere', function (msg) {
                 alert(msg);
             });
 
-            window.addEventListener('unload', function() {
+            window.addEventListener('unload', function () {
                 socket.emit('disconnection', 'disconnection');
             });
         }

@@ -33,13 +33,13 @@ try {
     logger.log('Exception occurred - ' + exception, true);
 }
 
-io.on('connection', function(socket){
-    socket.on('connection', function(msg) {
+io.on('connection', function(socket) {
+    socket.on('connection', function (msg) {
         console.log(msg);
         io.emit('isanybodyhere', 'is anybody here');
-    }).on('disconnection', function(msg) {
+    }).on('disconnection', function (msg) {
         console.log(msg);
-    }).on('iamhere', function(msg) {
+    }).on('iamhere', function (msg) {
         console.log(msg);
         io.emit('somebodyishere', msg);
     });
