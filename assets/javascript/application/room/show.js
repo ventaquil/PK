@@ -1,5 +1,7 @@
 'use strict';
 
+var room_id;
+
 document.addEventListener('DOMContentLoaded', function () {
     function show_hidden(event) {
         event.preventDefault();
@@ -22,6 +24,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
     Array.from(document.getElementsByClassName('container')).forEach(function (element) {
         if (element.id === 'room-show-container') {
+            const room_id_element = document.getElementById('room-id');
+
+            if (room_id_element) {
+                room_id = room_id_element.value;
+            }
+
             window.addEventListener('load', function () {
                 socket.emit('connection', 'connection');
             });
