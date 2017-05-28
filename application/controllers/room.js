@@ -22,12 +22,12 @@ module.exports = {
                         throw err;
                     }
 
-                    var roomId;
+                    var room_id;
 
                     const makeAction = function () { // Make evil function to hack do..while
-                        roomId = uuid.v1();
+                        room_id = crypto.createHmac('sha256', uuid.v1()).digest('hex').substr(0, random(8, 16));
 
-                        collection.count({'id': roomId}, null, function (err, count) {
+                        collection.count({'id': room_id}, null, function (err, count) {
                             if (err) {
                                 throw err;
                             }
@@ -36,27 +36,27 @@ module.exports = {
                                 makeAction(); // Evil recursive call - because of async
                             } else {
                                 collection.insertOne({
-                                    'id': roomId,
+                                    'id': room_id,
                                     'timestamp': new Date().getTime(),
                                     'users': [
                                         req.session.id
                                     ],
-                                    'join': crypto.createHmac('sha256', roomId).digest('hex').substr(5, random(4, 16))
+                                    'join': crypto.createHmac('sha256', room_id).digest('hex').substr(0, random(4, 8))
                                 });
 
-                                req.session.rooms.push(roomId);
+                                req.session.rooms.push(room_id);
 
                                 db.close();
 
                                 return res.json({
-                                    'href': roomId,
+                                    'href': room_id,
                                     'success': true
                                 });
                             }
                         });
                     };
 
-                    makeAction();
+                    makeAction(); // Evil recursive call
                 });
             });
         } else {
