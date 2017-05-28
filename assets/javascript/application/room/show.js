@@ -1,7 +1,7 @@
 'use strict';
 
 var room_id;
-var myfriend = false;
+var friend_online = false;
 
 document.addEventListener('DOMContentLoaded', function () {
     function show_hidden(event) {
@@ -32,7 +32,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }
 
             window.addEventListener('load', function () {
-                socket.emit('connection', {user_id: cookies.identifier, room_id: room_id});
+                socket.emit('connection', room_id, cookies.identifier);
             });
 
             const invite_form = document.getElementById('room-show-invite-form');
@@ -45,26 +45,30 @@ document.addEventListener('DOMContentLoaded', function () {
                 invite_button.addEventListener('click', show_hidden);
             }
 
-            socket.on('isanybodyhere', function (msg) {
-                socket.emit('iamhere', {user_id: cookies.identifier, room_id: room_id});
+            socket.on('isanybodyhere', function (asked_room_id) {
+                if (asked_room_id === room_id) {
+                    socket.emit('iamhere', room_id, cookies.identifier);
+                }
             });
 
-            socket.on('somebodyishere', function (msg) {
-                if (msg.room_id == room_id && msg.user_id != cookies.identifier) {
-                    myfriend = true;
+            socket.on('somebodyishere', function (aksed_room_id, asked_user_id) {
+                if ((aksed_room_id === room_id) && (asked_user_id !== cookies.identifier)) {
+                    friend_online = true;
+
                     alert("Friend connected to room");
                 }
             });
 
-            socket.on('somebodyisleaving', function (msg) {
-                if (msg.room_id == room_id) {
-                    myfriend = false;
+            socket.on('somebodyisleaving', function (asked_room_id) {
+                if (asked_room_id === room_id) {
+                    friend_online = false;
+
                     alert("Friend has leaved this room");
                 }
             });
 
             window.addEventListener('unload', function () {
-                socket.emit('disconnection', {user_id: cookies.identifier, room_id: room_id});
+                socket.emit('disconnection', room_id, cookies.identifier);
             });
         }
     });
