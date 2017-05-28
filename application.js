@@ -13,6 +13,10 @@ const port = process.env.PORT || 8000; // Choose application port
 
 app.set('view engine', 'pug'); // Set render engine
 
+const debug = process.env.DEBUG || false; // Debug mode?
+
+const verbose = debug || process.env.VERBOSE || false; // Show all logs on console screen?
+
 try {
     const routes = require('./application/routes')(app);
 
@@ -34,14 +38,17 @@ try {
 }
 
 io.on('connection', function(socket) {
-    socket.on('connection', function (msg) {
-        console.log("connection user " + msg.user_id + " to room " + msg.room_id);
-        io.emit('isanybodyhere', 'is anybody here');
-    }).on('disconnection', function (msg) {
-        console.log("disconnection user " + msg.user_id + " from room " + msg.room_id);
-        io.emit('somebodyisleaving', msg);
-    }).on('iamhere', function (msg) {
-        //console.log(msg);
-        io.emit('somebodyishere', msg);
+    socket.on('connection', function (room_id, user_id) {
+        logger.log('Connection event: user -> ' + user_id + ', room -> ' + room_id, verbose);
+
+        io.emit('isanybodyhere', room_id);
+    }).on('disconnection', function (room_id, user_id) {
+        logger.log('Disconnection event: user -> ' + user_id + ', room -> ' + room_id, verbose);
+
+        io.emit('somebodyisleaving', room_id, user_id);
+    }).on('iamhere', function (room_id, user_id) {
+        logger.log('Iamhere event: user -> ' + user_id + ', room -> ' + room_id, verbose);
+
+        io.emit('somebodyishere', room_id, user_id);
     });
 });
