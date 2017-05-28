@@ -39,6 +39,16 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 status_element.textContent = status_element.className.charAt(0).toUpperCase() + status_element.className.slice(1);
             }
+
+            const button_element = document.getElementById('throw-a-coin-button');
+
+            if (button_element) {
+                if (status) {
+                    button_element.removeAttribute('disabled');
+                } else {
+                    button_element.setAttribute('disabled', 'disabled');
+                }
+            }
         }
     }
 
