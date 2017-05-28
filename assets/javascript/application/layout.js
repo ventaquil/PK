@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', function () {
     for (var key in splited) {
         var cookie = splited[key].split('=');
 
-        cookies[cookie[0]] = cookie[1];
+        cookies[cookie[0].trim()] = cookie[1];
     }
 
     socket = io();
