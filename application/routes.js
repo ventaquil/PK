@@ -5,6 +5,7 @@ const directory = require('./helpers/directory');
 const error = require('./controllers/error');
 const express = require('express');
 const homepage = require('./controllers/homepage');
+const process = require('process');
 const room = require('./controllers/room');
 const session = require('express-session');
 
@@ -40,6 +41,15 @@ routes.prototype._middlewares = function () {
                 req.session.identifier = crypto.createHmac('sha256', req.session.id).digest('hex');
 
                 res.cookie('identifier', req.session.identifier, {});
+            }
+
+            next();
+        },
+        function (req, res, next) { // Enable debug cookie
+            if (process.env.DEBUG || false) {
+                res.cookie('debug', req.session.debug = true, {});
+            } else {
+                res.clearCookie('debug');
             }
 
             next();
