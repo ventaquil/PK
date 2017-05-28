@@ -1,6 +1,7 @@
 'use strict';
 
 var room_id;
+var myfriend = false;
 
 document.addEventListener('DOMContentLoaded', function () {
     function show_hidden(event) {
@@ -45,11 +46,14 @@ document.addEventListener('DOMContentLoaded', function () {
             }
 
             socket.on('isanybodyhere', function (msg) {
-                socket.emit('iamhere', 'id');
+                socket.emit('iamhere', {user_id: cookies.identifier, room_id: room_id});
             });
 
             socket.on('somebodyishere', function (msg) {
-                alert(msg);
+                if (msg.room_id == room_id && msg.user_id != cookies.identifier) {
+                    myfriend = true;
+                    alert(myfriend);
+                }
             });
 
             window.addEventListener('unload', function () {
