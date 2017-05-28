@@ -2,7 +2,7 @@ extends ../layout
 
 block content
     div#room-show-container.container.text-center
-        if room.users.length < 2
+        div#join-subcontainer(class=(room.users.length < 2 ? null : "hidden"))
             div.row
                 div.col-xs-12
                     | You need at least one more person
@@ -13,9 +13,12 @@ block content
                         input#room-show-invite-button.btn.btn-default(type="submit" value="Show invite link")
 
                         a.hidden #{join_url}
-        else
+
+        div#action-subcontainer(class=(room.users.length === 2 ? null : "hidden"))
             div.row
                 div.col-xs-12
-                    | TODO
+                    | Your friend status is
+                    |
+                    strong#your-friend-status.offline Offline
 
     input#room-id.hidden(name="room-id" type="hidden" value=room.id)
