@@ -1,8 +1,5 @@
 'use strict';
 
-var room_id;
-var friend_online = false;
-
 document.addEventListener('DOMContentLoaded', function () {
     function show_hidden(event) {
         event.preventDefault();
@@ -23,8 +20,33 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
+    function set_friend_status(status) {
+        const join_element = document.getElementById('join-subcontainer');
+
+        if (join_element) {
+            join_element.className = 'hidden';
+        }
+
+        const action_element = document.getElementById('action-subcontainer');
+
+        if (action_element) {
+            action_element.className = '';
+
+            const status_element = document.getElementById('your-friend-status');
+
+            if (status_element) {
+                status_element.className = status ? 'online' : 'offline';
+
+                status_element.textContent = status_element.className.charAt(0).toUpperCase() + status_element.className.slice(1);
+            }
+        }
+    }
+
     Array.from(document.getElementsByClassName('container')).forEach(function (element) {
         if (element.id === 'room-show-container') {
+            var room_id = 0;
+            var friend_online = false;
+
             const room_id_element = document.getElementById('room-id');
 
             if (room_id_element) {
@@ -71,7 +93,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 if ((asked_room_id === room_id) && (asked_user_id !== cookies.identifier)) {
                     friend_online = true;
 
-                    alert("Friend connected to room");
+                    set_friend_status(friend_online);
                 }
             });
 
@@ -83,7 +105,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (asked_room_id === room_id) {
                     friend_online = false;
 
-                    alert("Friend has leaved this room");
+                    set_friend_status(friend_online);
                 }
             });
 

@@ -43,6 +43,18 @@ div#room-show-container.container {
                     }
                 }
             }
+
+            strong {
+                &#your-friend-status {
+                    &.offline {
+                        color: #cc0000;
+                    }
+
+                    &.online {
+                        color: #ccff00;
+                    }
+                }
+            }
         }
     }
 }
