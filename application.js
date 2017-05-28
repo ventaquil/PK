@@ -35,12 +35,13 @@ try {
 
 io.on('connection', function(socket) {
     socket.on('connection', function (msg) {
-        console.log(msg);
+        console.log("connection user " + msg.user_id + " to room " + msg.room_id);
         io.emit('isanybodyhere', 'is anybody here');
     }).on('disconnection', function (msg) {
-        console.log(msg);
+        console.log("disconnection user " + msg.user_id + " from room " + msg.room_id);
+        io.emit('somebodyisleaving', msg);
     }).on('iamhere', function (msg) {
-        console.log(msg);
+        //console.log(msg);
         io.emit('somebodyishere', msg);
     });
 });

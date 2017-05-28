@@ -32,7 +32,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }
 
             window.addEventListener('load', function () {
-                socket.emit('connection', 'connection');
+                socket.emit('connection', {user_id: cookies.identifier, room_id: room_id});
             });
 
             const invite_form = document.getElementById('room-show-invite-form');
@@ -52,12 +52,19 @@ document.addEventListener('DOMContentLoaded', function () {
             socket.on('somebodyishere', function (msg) {
                 if (msg.room_id == room_id && msg.user_id != cookies.identifier) {
                     myfriend = true;
-                    alert(myfriend);
+                    alert("Friend connected to room");
+                }
+            });
+
+            socket.on('somebodyisleaving', function (msg) {
+                if (msg.room_id == room_id) {
+                    myfriend = false;
+                    alert("Friend has leaved this room");
                 }
             });
 
             window.addEventListener('unload', function () {
-                socket.emit('disconnection', 'disconnection');
+                socket.emit('disconnection', {user_id: cookies.identifier, room_id: room_id});
             });
         }
     });
