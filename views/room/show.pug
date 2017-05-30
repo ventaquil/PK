@@ -25,4 +25,15 @@ block content
                 div.col-xs-12
                     input#throw-a-coin-button.btn.btn-default.btn(type="submit" value="Throw a coin" disabled="disabled")
 
+            div#room-result-row.row.hidden
+                div.col-xs-12.col-sm-8.col-sm-push-2
+                    div#room-result-success.hidden
+                        | Success, you win!
+                    div#room-result-fail.hidden
+                        | Ohh, maybe next time.
+
+        div#shadow.hidden
+            div#loader
+                img(alt="Loader image" src="/images/loader.gif")
+
     input#room-id.hidden(name="room-id" type="hidden" value=room.id)

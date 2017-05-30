@@ -11,65 +11,90 @@ div#room-show-container.container {
         width: 60%;
     }
 
-    div.row {
-        > div {
-            form {
-                &#room-show-invite-form {
-                    margin: 2rem 0;
+    div {
+        &#shadow {
+            background-color: rgba(0, 0, 0, 0.7);
+            bottom: 0;
+            left: 0;
+            position: absolute;
+            right: 0;
+            top: 0;
 
-                    a {
-                        cursor: pointer;
-                        display: inline-block;
-                        font-size: 1.2rem;
-                        font-weight: bold;
-                        margin: 0.1rem;
-                        padding: 0.6rem 1.2rem;
-                    }
+            div#loader {
+                display: inline-block;
+                height: 16px;
+                left: 50%;
+                margin: -8px 0 0 -8px;
+                position: absolute;
+                top: 50%;
+                width: 16px;
+            }
+        }
 
-                    input#room-show-invite-button {
-                        transition: background-color 0.3s, border-color 0.3s, color 0.3s, margin 0.3s, padding 0.3s;
+        &.row {
+            &#room-result-row {
+                margin-top: 2rem;
+            }
 
-                        &:hover {
-                            margin: -0.6rem;
-                            padding: 1.2rem 1.8rem;
+            > div {
+                form {
+                    &#room-show-invite-form {
+                        margin: 2rem 0;
+
+                        a {
+                            cursor: pointer;
+                            display: inline-block;
+                            font-size: 1.2rem;
+                            font-weight: bold;
+                            margin: 0.1rem;
+                            padding: 0.6rem 1.2rem;
+                        }
+
+                        input#room-show-invite-button {
+                            transition: background-color 0.3s, border-color 0.3s, color 0.3s, margin 0.3s, padding 0.3s;
+
+                            &:hover {
+                                margin: -0.6rem;
+                                padding: 1.2rem 1.8rem;
+                            }
                         }
                     }
                 }
-            }
 
-            input {
-                background-color: transparent;
-                border-color: #ccff00;
-                color: #ccff00;
-                font-size: 1.2rem;
-                font-weight: bold;
-                margin: 0;
-                padding: 0.6rem 1.2rem;
-                transition: background-color 0.3s, border-color 0.3s, color 0.3s, margin 0.3s, padding 0.3s;
+                input {
+                    background-color: transparent;
+                    border-color: #ccff00;
+                    color: #ccff00;
+                    font-size: 1.2rem;
+                    font-weight: bold;
+                    margin: 0;
+                    padding: 0.6rem 1.2rem;
+                    transition: background-color 0.3s, border-color 0.3s, color 0.3s, margin 0.3s, padding 0.3s;
 
-                &[disabled] {
-                    opacity: 0.6;
-                }
-
-                &:active {
-                    margin: 0.2rem;
-                    padding: 0.4rem 1.0rem;
-                }
-
-                &:hover {
-                    border-color: #ffffff;
-                    color: #ffffff;
-                }
-            }
-
-            strong {
-                &#your-friend-status {
-                    &.offline {
-                        color: #cc0000;
+                    &[disabled] {
+                        opacity: 0.6;
                     }
 
-                    &.online {
-                        color: #ccff00;
+                    &:active {
+                        margin: 0.2rem;
+                        padding: 0.4rem 1.0rem;
+                    }
+
+                    &:hover {
+                        border-color: #ffffff;
+                        color: #ffffff;
+                    }
+                }
+
+                strong {
+                    &#your-friend-status {
+                        &.offline {
+                            color: #cc0000;
+                        }
+
+                        &.online {
+                            color: #ccff00;
+                        }
                     }
                 }
             }

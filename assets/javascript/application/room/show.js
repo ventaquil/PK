@@ -1,22 +1,24 @@
 'use strict';
 
 document.addEventListener('DOMContentLoaded', function () {
-    function show_hidden(event) {
-        event.preventDefault();
+    function hide_result() {
+        ['room-result-success', 'room-result-fail'].forEach(function (id) {
+            const element = document.getElementById(id);
 
-        const next_element = this.nextElementSibling;
-        if ((next_element.tagName.toLowerCase() === 'a') && (next_element.className.indexOf('hidden') !== false)) {
-            const classes = next_element.className.split(' ');
+            if (element.className.indexOf('hidden') === -1) {
+                var classes = element.className.split(' ');
+                classes.push('hidden');
 
-            classes.forEach(function (name, index) {
-                if (name === 'hidden') {
-                    classes.splice(index, 1);
-                }
-            });
+                element.className = classes.join(' ');
+            }
+        });
+    }
 
-            next_element.className = classes.join(' ');
+    function hide_shadow() {
+        const shadow_element = document.getElementById('shadow');
 
-            this.remove();
+        if (shadow_element) {
+            shadow_element.className = 'hidden';
         }
     }
 
@@ -48,7 +50,54 @@ document.addEventListener('DOMContentLoaded', function () {
                 } else {
                     button_element.setAttribute('disabled', 'disabled');
                 }
+
+                hide_result();
             }
+        }
+    }
+
+    function show_hidden(event) {
+        event.preventDefault();
+
+        const next_element = this.nextElementSibling;
+        if ((next_element.tagName.toLowerCase() === 'a') && (next_element.className.indexOf('hidden') !== false)) {
+            const classes = next_element.className.split(' ');
+
+            classes.forEach(function (name, index) {
+                if (name === 'hidden') {
+                    classes.splice(index, 1);
+                }
+            });
+
+            next_element.className = classes.join(' ');
+
+            this.remove();
+        }
+    }
+
+    function show_result(id_name) {
+        const row_element = document.getElementById('room-result-row');
+
+        if (row_element) {
+            row_element.className = row_element.className.replace('hidden', '').trim();
+
+            hide_result();
+
+            if (id_name) {
+                const result_element = document.getElementById('room-result-' + id_name);
+
+                if (result_element) {
+                    result_element.className = result_element.className.replace('hidden', '').trim();
+                }
+            }
+        }
+    }
+
+    function show_shadow() {
+        const shadow_element = document.getElementById('shadow');
+
+        if (shadow_element) {
+            shadow_element.className = '';
         }
     }
 
@@ -91,6 +140,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
                         if (_state === STATES.FREE) {
                             _state = STATES.WAITING_FOR_PARITY;
+
+                            show_shadow();
 
                             var tmp = new Uint8Array(1);
                             window.crypto.getRandomValues(tmp);
@@ -163,6 +214,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 if ((asked_room_id === room_id) && (asked_user_id !== cookies.identifier) && (_state === STATES.FREE)) {
                     _state = STATES.WAITING_FOR_NUMBER;
 
+                    show_shadow();
+
                     _hashed = asked_hashed_value;
 
                     var tmp = new Uint8Array(1);
@@ -187,10 +240,12 @@ document.addEventListener('DOMContentLoaded', function () {
                     }
 
                     if ((asked_room_id === room_id) && (asked_user_id === cookies.identifier)) { // @TODO
-                        console.log((_parity === (_value % 2)) ? 'success' : 'fail');
-                    }
+                        show_result((_parity === (_value % 2)) ? 'success' : 'fail');
 
-                    _state = STATES.FREE;
+                        _state = STATES.FREE;
+
+                        hide_shadow();
+                    }
                 }
             });
 
@@ -203,10 +258,12 @@ document.addEventListener('DOMContentLoaded', function () {
                     }
 
                     if ((asked_room_id === room_id) && (asked_user_id !== cookies.identifier)) {
-                        console.log((_parity === (_value % 2)) ? 'fail' : 'success');
-                    }
+                        show_result((_parity === (_value % 2)) ? 'fail' : 'success');
 
-                    _state = STATES.FREE;
+                        _state = STATES.FREE;
+
+                        hide_shadow();
+                    }
                 }
             });
 
