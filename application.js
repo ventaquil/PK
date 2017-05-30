@@ -42,27 +42,44 @@ io.on('connection', function(socket) {
     var numbers = [];
 
     socket.on('connection', function (room_id, user_id) {
-        logger.log('Connection event: user -> ' + user_id + ', room -> ' + room_id, verbose);
+        logger.log('Connection event: room -> ' + room_id + ', user -> ' + user_id, verbose);
 
-        io.emit('isanybodyhere', room_id);
+        io.emit('is anybody here', room_id);
+
+        logger.log('Is anybody here emit: room -> ' + room_id, verbose);
     }).on('disconnection', function (room_id, user_id) {
-        logger.log('Disconnection event: user -> ' + user_id + ', room -> ' + room_id, verbose);
+        logger.log('Disconnection event: room -> ' + room_id + ', user -> ' + user_id, verbose);
 
-        io.emit('somebodyisleaving', room_id, user_id);
-    }).on('iamhere', function (room_id, user_id) {
-        logger.log('Iamhere event: user -> ' + user_id + ', room -> ' + room_id, verbose);
+        io.emit('somebody is leaving', room_id, user_id);
 
-        io.emit('somebodyishere', room_id, user_id);
+        logger.log('Somebody is leaving emit: room -> ' + room_id + ', user -> ' + user_id, verbose);
+    }).on('i am here', function (room_id, user_id) {
+        logger.log('I am here event: room -> ' + room_id + ', user -> ' + user_id, verbose);
+
+        io.emit('somebody is here', room_id, user_id);
+
+        logger.log('Somebody is here emit: room -> ' + room_id + ', user -> ' + user_id, verbose);
     }).on('protocol initialization', function (room_id, user_id, random_value) {
-        logger.log('Protocol initialization event: random value -> ' + random_value + ', user -> ' + user_id + ', room -> ' + room_id, verbose);
-
-        const hashedValue = crypto.createHash('sha1').update(random_value.toString()).digest('hex');
+        logger.log('Protocol initialization event: room -> ' + room_id + ', user -> ' + user_id + ', random value -> ' + random_value, verbose);
 
         numbers[room_id] = random_value;
-        io.emit('protocol hashed value', room_id, user_id, hashedValue);
+
+        const hashed_value = crypto.createHash('sha1').update(random_value.toString()).digest('hex');
+
+        io.emit('protocol hashed value', room_id, user_id, hashed_value);
+
+        logger.log('Protocol hashed value emit: room -> ' + room_id + ', user -> ' + user_id + ', hashed value -> ' + hashed_value, verbose);
     }).on('protocol parity', function (room_id, user_id, parity) {
+        logger.log('Protocol parity event: room -> ' + room_id + ', user -> ' + user_id + ', parity -> ' + parity, verbose);
+
         io.emit('protocol parity check', room_id, user_id, parity);
+
+        logger.log('Protocol parity check emit: room -> ' + room_id + ', user -> ' + user_id + ', parity -> ' + parity, verbose);
+
         io.emit('protocol original number', room_id, user_id, numbers[room_id]);
+
+        logger.log('Protocol original number emit: room -> ' + room_id + ', user -> ' + user_id + ', original number -> ' + numbers[room_id], verbose);
+
         delete numbers[room_id];
     });
 });

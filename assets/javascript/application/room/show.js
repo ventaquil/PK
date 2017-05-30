@@ -67,26 +67,34 @@ document.addEventListener('DOMContentLoaded', function () {
                 socket.emit('connection', room_id, cookies.identifier);
 
                 if (cookies.debug) {
-                    console.log('Connection event: user -> ' + cookies.identifier + ', room -> ' + room_id);
+                    console.log('Connection emit: room -> ' + room_id + ', user -> ' + cookies.identifier);
                 }
 
                 const button_element = document.getElementById('throw-a-coin-button');
 
                 if (button_element) {
-                    button_element.addEventListener('click', function(event) {
+                    button_element.addEventListener('click', function (event) {
                         event.stopPropagation();
                         event.preventDefault();
 
                         var tmp = new Uint8Array(1);
                         window.crypto.getRandomValues(tmp);
 
-                        const randomValue = tmp[0];
+                        const random_value = tmp[0];
 
-                        socket.emit('protocol initialization', room_id, cookies.identifier, randomValue);
+                        socket.emit('protocol initialization', room_id, cookies.identifier, random_value);
 
-                        socket.on('protocol parity check', function(asked_room_id, asked_user_id, asked_parity) {
+                        if (cookies.debug) {
+                            console.log('Protocol initialization emit: room -> ' + room_id + ', user -> ' + cookies.identifier + ', random value -> ' + random_value);
+                        }
+
+                        socket.on('protocol parity check', function (asked_room_id, asked_user_id, asked_parity) {
+                            if (cookies.debug) {
+                                console.log('Protocol parity check event: room -> ' + asked_room_id + ', user -> ' + asked_user_id + ', parity -> ' + asked_parity);
+                            }
+
                             if ((asked_room_id === room_id) && (asked_user_id !== cookies.identifier)) {
-                                console.log((asked_parity === (randomValue % 2)) ? 'fail' : 'sukces');
+                                console.log((asked_parity === (random_value % 2)) ? 'fail' : 'sukces');
                             }
                         });
                     });
@@ -103,23 +111,23 @@ document.addEventListener('DOMContentLoaded', function () {
                 invite_button.addEventListener('click', show_hidden);
             }
 
-            socket.on('isanybodyhere', function (asked_room_id) {
+            socket.on('is anybody here', function (asked_room_id) {
                 if (cookies.debug) {
-                    console.log('Isanybodyhere event: room -> ' + asked_room_id);
+                    console.log('Is anybody here event: room -> ' + asked_room_id);
                 }
 
                 if (asked_room_id === room_id) {
-                    socket.emit('iamhere', room_id, cookies.identifier);
+                    socket.emit('i am here', room_id, cookies.identifier);
 
                     if (cookies.debug) {
-                        console.log('Iamhere event: user -> ' + cookies.identifier + ', room -> ' + room_id);
+                        console.log('I am here emit: room -> ' + room_id + ', user -> ' + cookies.identifier);
                     }
                 }
             });
 
-            socket.on('somebodyishere', function (asked_room_id, asked_user_id) {
+            socket.on('somebody is here', function (asked_room_id, asked_user_id) {
                 if (cookies.debug) {
-                    console.log('Somebodyishere event: user -> ' + asked_user_id + ', room -> ' + asked_room_id);
+                    console.log('Somebody is here event: room -> ' + asked_room_id + ', user -> ' + asked_user_id);
                 }
 
                 if ((asked_room_id === room_id) && (asked_user_id !== cookies.identifier)) {
@@ -129,9 +137,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
             });
 
-            socket.on('somebodyisleaving', function (asked_room_id, asked_user_id) {
+            socket.on('somebody is leaving', function (asked_room_id, asked_user_id) {
                 if (cookies.debug) {
-                    console.log('Somebodyisleaving event: user -> ' + asked_user_id + ', room -> ' + asked_room_id);
+                    console.log('Somebody is leaving event: room -> ' + asked_room_id + ', user -> ' + asked_user_id);
                 }
 
                 if (asked_room_id === room_id) {
@@ -141,25 +149,39 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
             });
 
-            socket.on('protocol hashed value', function (asked_room_id, asked_user_id, asked_hash_value) {
-               if ((asked_room_id === room_id) && (asked_user_id !== cookies.identifier)) {
-                   var tmp = new Uint8Array(1);
-                   window.crypto.getRandomValues(tmp);
+            socket.on('protocol hashed value', function (asked_room_id, asked_user_id, asked_hashed_value) {
+                if (cookies.debug) {
+                    console.log('Protocol hashed value event: room -> ' + room_id + ', user -> ' + cookies.identifier + ', hashed value -> ' + asked_hashed_value);
+                }
 
-                   const randomValue = tmp[0] % 2;
-                   socket.emit('protocol parity', room_id, cookies.identifier, randomValue);
-                   socket.on('protocol original number', function(asked_room_id, asked_user_id, asked_random_number) {
-                       if ((asked_room_id === room_id) && (asked_user_id === cookies.identifier)) { // @TODO
-                           console.log((randomValue === (asked_random_number % 2)) ? 'sukces' : 'fail');
-                       }
-                   });
-               }
+                if ((asked_room_id === room_id) && (asked_user_id !== cookies.identifier)) {
+                    var tmp = new Uint8Array(1);
+                    window.crypto.getRandomValues(tmp);
+
+                    const random_value = tmp[0] % 2;
+
+                    socket.emit('protocol parity', room_id, cookies.identifier, random_value);
+
+                    if (cookies.debug) {
+                        console.log('Protocol parity emit: room -> ' + room_id + ', user -> ' + cookies.identifier + ', parity -> ' + random_value);
+                    }
+
+                    socket.on('protocol original number', function (asked_room_id, asked_user_id, asked_random_number) {
+                        if (cookies.debug) {
+                            console.log('Protocol original number event: room -> ' + asked_room_id + ', user -> ' + asked_user_id + ', random number -> ' + asked_random_number);
+                        }
+
+                        if ((asked_room_id === room_id) && (asked_user_id === cookies.identifier)) { // @TODO
+                            console.log((random_value === (asked_random_number % 2)) ? 'sukces' : 'fail');
+                        }
+                    });
+                }
             });
 
             window.addEventListener('unload', function () {
                 socket.emit('disconnection', room_id, cookies.identifier);
 
-                console.log('Disconnection event: user -> ' + cookies.identifier + ', room -> ' + room_id);
+                console.log('Disconnection emit: room -> ' + room_id + ', user -> ' + cookies.identifier);
             });
         }
     });
