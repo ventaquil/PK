@@ -69,6 +69,21 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (cookies.debug) {
                     console.log('Connection event: user -> ' + cookies.identifier + ', room -> ' + room_id);
                 }
+
+                const button_element = document.getElementById('throw-a-coin-button');
+
+                if (button_element) {
+                    button_element.addEventListener('click', function(event) {
+                        event.stopPropagation();
+                        event.preventDefault();
+
+                        var tmp = new Uint8Array(1);
+                        window.crypto.getRandomValues(tmp);
+
+                        const randomValue = tmp[0];
+                        console.log(randomValue);
+                    });
+                }
             });
 
             const invite_form = document.getElementById('room-show-invite-form');
