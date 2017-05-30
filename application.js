@@ -1,5 +1,6 @@
 'use strict';
 
+const crypto = require('crypto');
 const database = require('./application/helpers/database');
 const express = require('express');
 const logger = require('./application/helpers/logger');
@@ -50,5 +51,10 @@ io.on('connection', function(socket) {
         logger.log('Iamhere event: user -> ' + user_id + ', room -> ' + room_id, verbose);
 
         io.emit('somebodyishere', room_id, user_id);
+    }).on('protocol initialization', function(room_id, user_id, random_value) {
+        logger.log('Protocol initialization event: random value -> ' + random_value + ', user -> ' + user_id + ', room -> ' + room_id, verbose);
+
+        const hashedValue = crypto.createHash('sha1').update(random_value.toString()).digest('hex');
+        console.log(hashedValue);
     });
 });

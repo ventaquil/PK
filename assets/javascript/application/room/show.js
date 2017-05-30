@@ -81,7 +81,8 @@ document.addEventListener('DOMContentLoaded', function () {
                         window.crypto.getRandomValues(tmp);
 
                         const randomValue = tmp[0];
-                        console.log(randomValue);
+
+                        socket.emit('protocol initialization', room_id, cookies.identifier, randomValue);
                     });
                 }
             });
