@@ -38,9 +38,9 @@ try {
     logger.log('Exception occurred - ' + exception, true);
 }
 
-io.on('connection', function(socket) {
-    var numbers = [];
+var numbers = [];
 
+io.on('connection', function(socket) {
     socket.on('connection', function (room_id, user_id) {
         logger.log('Connection event: room -> ' + room_id + ', user -> ' + user_id, verbose);
 

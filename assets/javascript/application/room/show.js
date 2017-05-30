@@ -59,6 +59,18 @@ document.addEventListener('DOMContentLoaded', function () {
 
             const room_id_element = document.getElementById('room-id');
 
+            const STATES = {
+                'FREE': 0,
+                'WAITING_FOR_PARITY': 1,
+                'WAITING_FOR_NUMBER': 2
+            };
+
+            var _state = STATES.FREE;
+
+            var _hashed = null;
+            var _parity = null;
+            var _value = null;
+
             if (room_id_element) {
                 room_id = room_id_element.value;
             }
@@ -77,26 +89,20 @@ document.addEventListener('DOMContentLoaded', function () {
                         event.stopPropagation();
                         event.preventDefault();
 
-                        var tmp = new Uint8Array(1);
-                        window.crypto.getRandomValues(tmp);
+                        if (_state === STATES.FREE) {
+                            _state = STATES.WAITING_FOR_PARITY;
 
-                        const random_value = tmp[0];
+                            var tmp = new Uint8Array(1);
+                            window.crypto.getRandomValues(tmp);
 
-                        socket.emit('protocol initialization', room_id, cookies.identifier, random_value);
+                            _value = tmp[0];
 
-                        if (cookies.debug) {
-                            console.log('Protocol initialization emit: room -> ' + room_id + ', user -> ' + cookies.identifier + ', random value -> ' + random_value);
-                        }
+                            socket.emit('protocol initialization', room_id, cookies.identifier, _value);
 
-                        socket.on('protocol parity check', function (asked_room_id, asked_user_id, asked_parity) {
                             if (cookies.debug) {
-                                console.log('Protocol parity check event: room -> ' + asked_room_id + ', user -> ' + asked_user_id + ', parity -> ' + asked_parity);
+                                console.log('Protocol initialization emit: room -> ' + room_id + ', user -> ' + cookies.identifier + ', random value -> ' + _value);
                             }
-
-                            if ((asked_room_id === room_id) && (asked_user_id !== cookies.identifier)) {
-                                console.log((asked_parity === (random_value % 2)) ? 'fail' : 'sukces');
-                            }
-                        });
+                        }
                     });
                 }
             });
@@ -154,27 +160,53 @@ document.addEventListener('DOMContentLoaded', function () {
                     console.log('Protocol hashed value event: room -> ' + room_id + ', user -> ' + cookies.identifier + ', hashed value -> ' + asked_hashed_value);
                 }
 
-                if ((asked_room_id === room_id) && (asked_user_id !== cookies.identifier)) {
+                if ((asked_room_id === room_id) && (asked_user_id !== cookies.identifier) && (_state === STATES.FREE)) {
+                    _state = STATES.WAITING_FOR_NUMBER;
+
+                    _hashed = asked_hashed_value;
+
                     var tmp = new Uint8Array(1);
                     window.crypto.getRandomValues(tmp);
 
-                    const random_value = tmp[0] % 2;
+                    _parity = tmp[0] % 2;
 
-                    socket.emit('protocol parity', room_id, cookies.identifier, random_value);
+                    socket.emit('protocol parity', room_id, cookies.identifier, _parity);
 
                     if (cookies.debug) {
-                        console.log('Protocol parity emit: room -> ' + room_id + ', user -> ' + cookies.identifier + ', parity -> ' + random_value);
+                        console.log('Protocol parity emit: room -> ' + room_id + ', user -> ' + cookies.identifier + ', parity -> ' + _parity);
+                    }
+                }
+            });
+
+            socket.on('protocol original number', function (asked_room_id, asked_user_id, asked_random_number) {
+                if (_state === STATES.WAITING_FOR_NUMBER) {
+                    _value = asked_random_number;
+
+                    if (cookies.debug) {
+                        console.log('Protocol original number event: room -> ' + asked_room_id + ', user -> ' + asked_user_id + ', random number -> ' + asked_random_number);
                     }
 
-                    socket.on('protocol original number', function (asked_room_id, asked_user_id, asked_random_number) {
-                        if (cookies.debug) {
-                            console.log('Protocol original number event: room -> ' + asked_room_id + ', user -> ' + asked_user_id + ', random number -> ' + asked_random_number);
-                        }
+                    if ((asked_room_id === room_id) && (asked_user_id === cookies.identifier)) { // @TODO
+                        console.log((_parity === (_value % 2)) ? 'success' : 'fail');
+                    }
 
-                        if ((asked_room_id === room_id) && (asked_user_id === cookies.identifier)) { // @TODO
-                            console.log((random_value === (asked_random_number % 2)) ? 'sukces' : 'fail');
-                        }
-                    });
+                    _state = STATES.FREE;
+                }
+            });
+
+            socket.on('protocol parity check', function (asked_room_id, asked_user_id, asked_parity) {
+                if (_state === STATES.WAITING_FOR_PARITY) {
+                    _parity = asked_parity;
+
+                    if (cookies.debug) {
+                        console.log('Protocol parity check event: room -> ' + asked_room_id + ', user -> ' + asked_user_id + ', parity -> ' + asked_parity);
+                    }
+
+                    if ((asked_room_id === room_id) && (asked_user_id !== cookies.identifier)) {
+                        console.log((_parity === (_value % 2)) ? 'fail' : 'success');
+                    }
+
+                    _state = STATES.FREE;
                 }
             });
 
