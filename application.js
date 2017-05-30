@@ -39,6 +39,8 @@ try {
 }
 
 io.on('connection', function(socket) {
+    var numbers = [];
+
     socket.on('connection', function (room_id, user_id) {
         logger.log('Connection event: user -> ' + user_id + ', room -> ' + room_id, verbose);
 
@@ -51,10 +53,16 @@ io.on('connection', function(socket) {
         logger.log('Iamhere event: user -> ' + user_id + ', room -> ' + room_id, verbose);
 
         io.emit('somebodyishere', room_id, user_id);
-    }).on('protocol initialization', function(room_id, user_id, random_value) {
+    }).on('protocol initialization', function (room_id, user_id, random_value) {
         logger.log('Protocol initialization event: random value -> ' + random_value + ', user -> ' + user_id + ', room -> ' + room_id, verbose);
 
         const hashedValue = crypto.createHash('sha1').update(random_value.toString()).digest('hex');
-        console.log(hashedValue);
+
+        numbers[room_id] = random_value;
+        io.emit('protocol hashed value', room_id, user_id, hashedValue);
+    }).on('protocol parity', function (room_id, user_id, parity) {
+        io.emit('protocol parity check', room_id, user_id, parity);
+        io.emit('protocol original number', room_id, user_id, numbers[room_id]);
+        delete numbers[room_id];
     });
 });
