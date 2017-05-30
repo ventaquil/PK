@@ -29,7 +29,7 @@ div#room-show-container.container {
                     input#room-show-invite-button {
                         transition: background-color 0.3s, border-color 0.3s, color 0.3s, margin 0.3s, padding 0.3s;
 
-                        &:hover, &:focus {
+                        &:hover {
                             margin: -0.6rem;
                             padding: 1.2rem 1.8rem;
                         }
@@ -45,13 +45,18 @@ div#room-show-container.container {
                 font-weight: bold;
                 margin: 0;
                 padding: 0.6rem 1.2rem;
-                transition: background-color 0.3s, border-color 0.3s, color 0.3s;
+                transition: background-color 0.3s, border-color 0.3s, color 0.3s, margin 0.3s, padding 0.3s;
 
                 &[disabled] {
                     opacity: 0.6;
                 }
 
-                &:hover, &:focus {
+                &:active {
+                    margin: 0.2rem;
+                    padding: 0.4rem 1.0rem;
+                }
+
+                &:hover {
                     border-color: #ffffff;
                     color: #ffffff;
                 }
