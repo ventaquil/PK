@@ -59,24 +59,28 @@ io.on('connection', function(socket) {
 
         logger.log('Somebody is here emit: room -> ' + room_id + ', user -> ' + user_id, verbose);
     }).on('protocol initialization', function (room_id, user_id, random_value, hashed_value) {
-        logger.log('Protocol initialization event: room -> ' + room_id + ', user -> ' + user_id + ', random value -> ' + random_value + ', hashed value -> ' + hashed_value, verbose);
+        if (!(room_id in numbers)) {
+            logger.log('Protocol initialization event: room -> ' + room_id + ', user -> ' + user_id + ', random value -> ' + random_value + ', hashed value -> ' + hashed_value, verbose);
 
-        numbers[room_id] = random_value;
+            numbers[room_id] = random_value;
 
-        io.emit('protocol hashed value', room_id, user_id, hashed_value);
+            io.emit('protocol hashed value', room_id, user_id, hashed_value);
 
-        logger.log('Protocol hashed value emit: room -> ' + room_id + ', user -> ' + user_id + ', hashed value -> ' + hashed_value, verbose);
+            logger.log('Protocol hashed value emit: room -> ' + room_id + ', user -> ' + user_id + ', hashed value -> ' + hashed_value, verbose);
+        }
     }).on('protocol parity', function (room_id, user_id, parity) {
-        logger.log('Protocol parity event: room -> ' + room_id + ', user -> ' + user_id + ', parity -> ' + parity, verbose);
+        if (room_id in numbers) {
+            logger.log('Protocol parity event: room -> ' + room_id + ', user -> ' + user_id + ', parity -> ' + parity, verbose);
 
-        io.emit('protocol parity check', room_id, user_id, parity);
+            io.emit('protocol parity check', room_id, user_id, parity);
 
-        logger.log('Protocol parity check emit: room -> ' + room_id + ', user -> ' + user_id + ', parity -> ' + parity, verbose);
+            logger.log('Protocol parity check emit: room -> ' + room_id + ', user -> ' + user_id + ', parity -> ' + parity, verbose);
 
-        io.emit('protocol original number', room_id, user_id, numbers[room_id]);
+            io.emit('protocol original number', room_id, user_id, numbers[room_id]);
 
-        logger.log('Protocol original number emit: room -> ' + room_id + ', user -> ' + user_id + ', original number -> ' + numbers[room_id], verbose);
+            logger.log('Protocol original number emit: room -> ' + room_id + ', user -> ' + user_id + ', original number -> ' + numbers[room_id], verbose);
 
-        delete numbers[room_id];
+            delete numbers[room_id];
+        }
     });
 });
