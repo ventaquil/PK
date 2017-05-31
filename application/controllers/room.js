@@ -85,7 +85,7 @@ module.exports = {
                                 throw err;
                             }
 
-                            if (room === null) {
+                            if ((room === null) || (room.users.length === 2)) {
                                 return req.next();
                             }
 
