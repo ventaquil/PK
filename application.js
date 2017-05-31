@@ -1,6 +1,5 @@
 'use strict';
 
-const crypto = require('crypto');
 const database = require('./application/helpers/database');
 const express = require('express');
 const logger = require('./application/helpers/logger');
@@ -59,12 +58,10 @@ io.on('connection', function(socket) {
         io.emit('somebody is here', room_id, user_id);
 
         logger.log('Somebody is here emit: room -> ' + room_id + ', user -> ' + user_id, verbose);
-    }).on('protocol initialization', function (room_id, user_id, random_value) {
-        logger.log('Protocol initialization event: room -> ' + room_id + ', user -> ' + user_id + ', random value -> ' + random_value, verbose);
+    }).on('protocol initialization', function (room_id, user_id, random_value, hashed_value) {
+        logger.log('Protocol initialization event: room -> ' + room_id + ', user -> ' + user_id + ', random value -> ' + random_value + ', hashed value -> ' + hashed_value, verbose);
 
         numbers[room_id] = random_value;
-
-        const hashed_value = crypto.createHash('sha1').update(random_value.toString()).digest('hex');
 
         io.emit('protocol hashed value', room_id, user_id, hashed_value);
 

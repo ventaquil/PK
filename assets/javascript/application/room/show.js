@@ -147,11 +147,12 @@ document.addEventListener('DOMContentLoaded', function () {
                             window.crypto.getRandomValues(tmp);
 
                             _value = tmp[0];
+                            _hashed = CryptoJS.SHA3(_value.toString()).toString(CryptoJS.enc.Hex);
 
-                            socket.emit('protocol initialization', room_id, cookies.identifier, _value);
+                            socket.emit('protocol initialization', room_id, cookies.identifier, _value, _hashed);
 
                             if (cookies.debug) {
-                                console.log('Protocol initialization emit: room -> ' + room_id + ', user -> ' + cookies.identifier + ', random value -> ' + _value);
+                                console.log('Protocol initialization emit: room -> ' + room_id + ', user -> ' + cookies.identifier + ', random value -> ' + _value + ', hashed value -> ' + _hashed);
                             }
                         }
                     });
@@ -239,7 +240,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         console.log('Protocol original number event: room -> ' + asked_room_id + ', user -> ' + asked_user_id + ', random number -> ' + asked_random_number);
                     }
 
-                    if ((asked_room_id === room_id) && (asked_user_id === cookies.identifier)) { // @TODO
+                    if ((asked_room_id === room_id) && (asked_user_id === cookies.identifier) && (_hashed === CryptoJS.SHA3(_value.toString()).toString(CryptoJS.enc.Hex))) {
                         show_result((_parity === (_value % 2)) ? 'success' : 'fail');
 
                         _state = STATES.FREE;
