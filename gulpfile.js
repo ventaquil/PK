@@ -36,7 +36,7 @@ gulp.task('css-map', ['minify-css'], function () {
 });
 
 gulp.task('javascript', function () {
-    gulp.src([path.join(directory.javascript(), 'application', '**', '*.js')])
+    gulp.src([path.join(directory.javascript(), 'application', '**', '*.js'), path.join(directory.javascript(), 'libraries', '**', '*.js')])
         .pipe(concat('scripts.js'))
         .pipe(gulp.dest(path.join(directory.public(), 'javascript')));
 });
