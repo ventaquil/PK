@@ -52,6 +52,14 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
 
                 hide_result();
+
+                const parent = document.getElementById('room-result-row');
+                if (parent) {
+                    var classes = parent.className.split(' ');
+                    classes.push('hidden');
+
+                    parent.className = classes.join(' ');
+                }
             }
         }
     }
